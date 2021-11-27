@@ -2,3 +2,5 @@ composer create-project laravel/laravel AppArchivos
 php artisan serve
 php artisan make:model Models/Archivo -m
 php artisan make:controller User/ArchivoController -r  
+---para autenticacion----
+composer require laravel/ui 
