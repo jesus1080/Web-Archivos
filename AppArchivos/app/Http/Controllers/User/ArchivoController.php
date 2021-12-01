@@ -4,6 +4,8 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Models\Archivo;
 
 class ArchivoController extends Controller
 {
@@ -21,7 +23,18 @@ class ArchivoController extends Controller
 
     public function store(Request $request)
     {
-        dd("Upload");
+        $max_size = (int)ini_get('upload_max_filesize') * 10240;
+        $files = $request->file('files');
+        $user_id = Auth::id();
+
+        foreach($files as $file){
+            Archivo::create([
+                'name' => $file->getClientOriginalName(),
+                'user_id' => $user_id
+            ]);
+        }
+        return "uploaded";
+        
     }
 
     /**
