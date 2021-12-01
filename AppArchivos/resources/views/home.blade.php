@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header">{{ __('Subir archivos') }}</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -14,7 +14,16 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    <form method="POST" action="{{ route('user.files.store') }}" enctype="multipart/form-data">
+                        @csrf
+                        <input type="file" class="from-control" name="files[]" multiple>
+
+                        <button type="submit" class="mt-4 btn btn-primary float-right">
+                            Subir
+                        </button>
+                    </form>
+
+                    
                 </div>
             </div>
         </div>
