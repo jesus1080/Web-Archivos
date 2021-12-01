@@ -16,7 +16,7 @@
 
                     <form method="POST" action="{{ route('user.files.store') }}" enctype="multipart/form-data">
                         @csrf
-                        <input type="file" class="from-control" name="files[]" multiple>
+                        <input type="file" class="from-control" name="files[]" multiple require>
 
                         <button type="submit" class="mt-4 btn btn-primary float-right">
                             Subir

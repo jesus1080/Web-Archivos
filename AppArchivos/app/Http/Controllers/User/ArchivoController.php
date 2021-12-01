@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Models\Archivo;
+use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
+
 
 class ArchivoController extends Controller
 {
@@ -28,12 +31,16 @@ class ArchivoController extends Controller
         $user_id = Auth::id();
 
         foreach($files as $file){
-            Archivo::create([
-                'name' => $file->getClientOriginalName(),
-                'user_id' => $user_id
-            ]);
+            if(Storage::putFileAs('/public/'. $user_id . '/', $file, $file->getClientOriginalName())){
+                Archivo::create([
+                    'name' => $file->getClientOriginalName(),
+                    'user_id' => $user_id
+                ]);
+            }
         }
-        return "uploaded";
+        Alert::success('My bien!!', 'Se ha subido el archivo');
+
+        return back();
         
     }
 

@@ -4,3 +4,7 @@ php artisan make:model Models/Archivo -m
 php artisan make:controller User/ArchivoController -r  
 ---para autenticacion----
 composer require laravel/ui 
+---para almacenamieto de archivos--
+php artisan storage:link
+---instalar paquete de alertas--
+composer require realrashid/sweet-alert
