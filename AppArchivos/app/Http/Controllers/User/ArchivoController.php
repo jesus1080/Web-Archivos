@@ -30,17 +30,24 @@ class ArchivoController extends Controller
         $files = $request->file('files');
         $user_id = Auth::id();
 
-        foreach($files as $file){
-            if(Storage::putFileAs('/public/'. $user_id . '/', $file, $file->getClientOriginalName())){
-                Archivo::create([
-                    'name' => $file->getClientOriginalName(),
-                    'user_id' => $user_id
-                ]);
+        if($request->hasFile('files')){
+            foreach($files as $file){
+                if(Storage::putFileAs('/public/'. $user_id . '/', $file, $file->getClientOriginalName())){
+                    Archivo::create([
+                        'name' => $file->getClientOriginalName(),
+                        'user_id' => $user_id
+                    ]);
+                }
             }
-        }
-        Alert::success('My bien!!', 'Se ha subido el archivo');
+            Alert::success('My bien!!', 'Se ha subido el archivo');
+            return back();
 
-        return back();
+        }else{
+            Alert::error('Error!!', 'Debes subir uno mas archivos');
+            return back();
+        }
+
+       
         
     }
 
