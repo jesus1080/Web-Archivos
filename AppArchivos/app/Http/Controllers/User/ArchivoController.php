@@ -15,7 +15,8 @@ class ArchivoController extends Controller
     
     public function index()
     {
-        //
+      $files = Archivo::where('user_id', Auth::id())->latest()->get();
+      return view('user.files.index', compact('files'));
     }
 
    
