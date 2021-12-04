@@ -25,8 +25,10 @@
                             <th scope="row">{{$file->id}}</th>
                             <td>{{$file->name}}</td>
                             <td>
-                                <a href="storage/{{Auth::id()}}/{{$file->name}}" class="btn btn-sm btn-outline-secondary">
-                                    Ver
+                                <a target="_blank" 
+                                   href="{{route('user.files.show', $file->id)}}" 
+                                   class="btn btn-sm btn-outline-secondary">
+                                   Ver
                                 </a>
                             </td>
                             <td>

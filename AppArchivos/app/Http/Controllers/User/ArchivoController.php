@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Models\Archivo;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use RealRashid\SweetAlert\Facades\Alert;
 
 
@@ -20,9 +21,16 @@ class ArchivoController extends Controller
     }
 
    
-    public function create()
+    public function show($id)
     {
-        //
+        $file = Archivo::whereId($id)->firstOrFail();
+        $user_id = Auth::id();
+
+        if($file->user_id == $user_id){
+            return redirect('/storage'.'/'.$user_id.'/'.$file->name);
+        }else{
+            abort(403);
+        }
     }
 
     public function store(Request $request)
@@ -33,7 +41,8 @@ class ArchivoController extends Controller
 
         if($request->hasFile('files')){
             foreach($files as $file){
-                if(Storage::putFileAs('/public/'. $user_id . '/', $file, $file->getClientOriginalName())){
+                $fileName = Str::slug($file->getClientOriginalName()) . '.' . $file->getClientOriginalExtension();
+                if(Storage::putFileAs('/public/'. $user_id . '/', $file,$fileName )){
                     Archivo::create([
                         'name' => $file->getClientOriginalName(),
                         'user_id' => $user_id
@@ -52,16 +61,7 @@ class ArchivoController extends Controller
         
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+    
 
     /**
      * Show the form for editing the specified resource.
