@@ -27,8 +27,11 @@ class ArchivoController extends Controller
         $user_id = Auth::id();
 
         if($file->user_id == $user_id){
+            
             return redirect('/storage'.'/'.$user_id.'/'.$file->name);
+            
         }else{
+            dd('esta entrando aca');
             abort(403);
         }
     }
@@ -41,10 +44,11 @@ class ArchivoController extends Controller
 
         if($request->hasFile('files')){
             foreach($files as $file){
-                $fileName = Str::slug($file->getClientOriginalName()) . '.' . $file->getClientOriginalExtension();
-                if(Storage::putFileAs('/public/'. $user_id . '/', $file,$fileName )){
+                #$fileName = Str::slug($file->getClientOriginalName()) . '.' . $file->getClientOriginalExtension();
+                if(Storage::putFileAs('/public/'. $user_id . '/',$file,$file->getCLientOriginalName())){
                     Archivo::create([
                         'name' => $file->getClientOriginalName(),
+                        
                         'user_id' => $user_id
                     ]);
                 }
@@ -61,39 +65,18 @@ class ArchivoController extends Controller
         
     }
 
-    
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+  
+    public function destroy(Request $request,$id)
     {
-        //
-    }
+        //obtiene el archivo que queremos eliminar
+        $file = Archivo::whereId($id)->firstOrFail();
+        //Esta linea borra el archivo del almacenamiento
+        unlink(public_path('storage'.'/'.Auth::id().'/'.$file->name));
+        //Este otro borra el registro de la base de datos
+        $file->delete();
+        //informar del borrado
+        Alert::info('Eyyy!!', 'Se ha eliminado el archivo');
+        return back();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

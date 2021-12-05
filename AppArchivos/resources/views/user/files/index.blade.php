@@ -32,9 +32,17 @@
                                 </a>
                             </td>
                             <td>
-                            <a href="" class="btn btn-sm btn-outline-danger">
+                                <form action="{{route('user.files.destroy', $file->id)}}" method="POST">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button
+                                    type="submit"
+                                    class="btn btn-sm btn-outline-danger">
                                     Eliminar
-                                </a>
+                                </button>
+                                </form>
+                               
+                            
                             </td>
                         </tr>
                         @endforeach
